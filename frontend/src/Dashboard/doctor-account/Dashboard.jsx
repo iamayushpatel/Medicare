@@ -5,7 +5,7 @@ import { useGetProfile } from "../../hooks/useFetchData";
 import { BASE_URL } from "../../config";
 import Tabs from "./Tabs";
 
-import starIcon from "../../assets/images/star.png";
+import starIcon from "../../assets/images/Star.png";
 import DoctorAbout from "./../../pages/Doctors/DoctorAbout";
 import Profile from "./Profile";
 import Appointments from "./Appointments";
