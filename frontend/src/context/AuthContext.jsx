@@ -1,11 +1,21 @@
 import { createContext, useContext, useEffect, useReducer } from "react";
 
+// Helper to safely parse JSON from localStorage
+const safeJSONParse = (key) => {
+  try {
+    const value = localStorage.getItem(key);
+    if (value && value !== "undefined") {
+      return JSON.parse(value);
+    }
+  } catch (error) {
+    console.error(`Error parsing ${key} from localStorage`, error);
+  }
+  return null;
+};
+
 // Initial state
 const initialState = {
-  user:
-    localStorage.getItem("user") != undefined
-      ? JSON.parse(localStorage.getItem("user"))
-      : null,
+  user: safeJSONParse("user"),
   role: localStorage.getItem("role") || null,
   token: localStorage.getItem("token") || null,
 };
@@ -43,15 +53,16 @@ const authReducer = (state, action) => {
 export const AuthContextProvider = ({ children }) => {
   const [state, dispatch] = useReducer(authReducer, initialState);
 
-  // Optional: load user from localStorage when app loads
   useEffect(() => {
-    localStorage.setItem("user", JSON.stringify(state.user));
-    localStorage.setItem("token", state.token);
-    localStorage.setItem("role", state.role);
+    if (state.user !== undefined) {
+      localStorage.setItem("user", JSON.stringify(state.user));
+    }
+    localStorage.setItem("token", state.token || "");
+    localStorage.setItem("role", state.role || "");
   }, [state]);
 
   return (
-    <authContext.Provider value={{ state, dispatch }}>
+    <authContext.Provider value={{ ...state, dispatch }}>
       {children}
     </authContext.Provider>
   );

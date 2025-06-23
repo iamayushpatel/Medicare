@@ -1,7 +1,8 @@
-import { useEffect, useState } from "react";
-import { token } from "../config";
+import { useContext, useEffect, useState } from "react";
+import { authContext } from "../context/AuthContext";
 
 const useFetchData = (url) => {
+  const { token } = useContext(authContext);
   const [data, setData] = useState([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
@@ -9,7 +10,6 @@ const useFetchData = (url) => {
   useEffect(() => {
     const fetchData = async () => {
       setLoading(true);
-
       try {
         const res = await fetch(url, {
           headers: {
@@ -18,7 +18,6 @@ const useFetchData = (url) => {
         });
 
         const result = await res.json();
-
         if (!res.ok) {
           throw new Error(result.message);
         }
@@ -32,7 +31,7 @@ const useFetchData = (url) => {
     };
 
     fetchData();
-  }, [url]);
+  }, [url, token]);
 
   return {
     data,
@@ -41,10 +40,8 @@ const useFetchData = (url) => {
   };
 };
 
-// ✅ ADD THIS
 export const useGetProfile = (url) => {
   return useFetchData(url);
 };
 
-// ✅ KEEP THIS
 export default useFetchData;

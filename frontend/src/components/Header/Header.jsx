@@ -26,9 +26,13 @@ const navLinks = [
 const Header = () => {
   const headerRef = useRef(null);
   const menuRef = useRef(null);
-  // const { user, role, token } = useContext(authContext);
-  const { state } = useContext(authContext);
-  const { user, role, token } = state;
+
+  // ✅ Safe context usage with optional chaining
+  const auth = useContext(authContext);
+  const user = auth?.user;
+  const role = auth?.role;
+  const token = auth?.token;
+  const dispatch = auth?.dispatch;
 
   const handleStickyHeader = () => {
     window.addEventListener("scroll", () => {
@@ -45,9 +49,8 @@ const Header = () => {
 
   useEffect(() => {
     handleStickyHeader();
-
     return () => window.removeEventListener("scroll", handleStickyHeader);
-  });
+  }, []);
 
   const toggleMenu = () => menuRef.current.classList.toggle("show__menu");
 
@@ -56,8 +59,9 @@ const Header = () => {
       <div className="container">
         <div className="flex items-center justify-between">
           <div>
-            <img src={logo} alt="" />
+            <img src={logo} alt="Logo" />
           </div>
+
           <div className="navigation" ref={menuRef} onClick={toggleMenu}>
             <ul className="menu flex items-center gap-[2.7rem]">
               {navLinks.map((link, index) => (
@@ -76,21 +80,22 @@ const Header = () => {
               ))}
             </ul>
           </div>
+
           <div className="flex items-center gap-4">
             {token && user ? (
               <div>
                 <Link
-                  to={`${
+                  to={
                     role === "doctor"
                       ? "/doctors/profile/me"
                       : "/users/profile/me"
-                  }`}
+                  }
                 >
                   <figure className="w-[35px] h-[35px] rounded-full cursor-pointer">
                     <img
                       src={user?.photo}
                       className="w-full rounded-full"
-                      alt=""
+                      alt="User"
                     />
                   </figure>
                 </Link>

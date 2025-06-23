@@ -20,8 +20,6 @@ const MyAccount = () => {
     error,
   } = useGetProfile(`${BASE_URL}/users/profile/me`);
 
-  console.log(userData, "userdata");
-
   const handleLogout = () => {
     dispatch({ type: "LOGOUT" });
   };
@@ -30,7 +28,7 @@ const MyAccount = () => {
     <section>
       <div className="max-w-[1170px] px-5 mx-auto">
         {loading && !error && <Loading />}
-        {error && loading && <Error errMessage={error}/>}
+        {error && !loading && <Error errMessage={error} />}
         {!loading && !error && (
           <div className="grid md:grid-cols-3 gap-10">
             <div className="pb-[50px] px-[30px] rounded-md">
@@ -38,7 +36,7 @@ const MyAccount = () => {
                 <figure className="w-[100px] h-[100px] rounded-full border-2 border-solid border-primaryColor">
                   <img
                     src={userData.photo}
-                    alt=""
+                    alt="User"
                     className="w-full h-full rounded-full"
                   />
                 </figure>
@@ -46,22 +44,18 @@ const MyAccount = () => {
 
               <div className="text-center mt-4">
                 <h3 className="text-[18px] leading-[30px] text-headingColor font-bold">
-                 {userData.name}
+                  {userData.name}
                 </h3>
                 <p className="text-textColor text-[15px] leading-6 font-medium">
                   {userData.email}
                 </p>
-                 <p className="text-textColor text-[15px] leading-6 font-medium ">
+                <p className="text-textColor text-[15px] leading-6 font-medium">
                   Blood Type:{" "}
                   <span className="ml-2 text-headingColor text-[20px] leading-8">
                     {userData.bloodType}
                   </span>
                 </p>
               </div>
-
-              
-               
-             
 
               <div className="mt-[50px] md:mt-[100px]">
                 <button
@@ -100,8 +94,8 @@ const MyAccount = () => {
                 </button>
               </div>
 
-              {tab == "bookings" && <MyBookings />}
-              {tab == "settings" && <Profile user={userData}/>}
+              {tab === "bookings" && <MyBookings />}
+              {tab === "settings" && <Profile user={userData} />}
             </div>
           </div>
         )}

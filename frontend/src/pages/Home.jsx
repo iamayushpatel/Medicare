@@ -44,7 +44,9 @@ const Home = () => {
                   empowers individuals to prioritize their well-being and seek
                   expert healthcare advice with ease and convenience.
                 </p>
-                <button className="btn">Request An Appointment</button>
+                <Link to="/doctors">
+  <button className="btn">Request An Appointment</button>
+</Link>
               </div>
 
               <div
